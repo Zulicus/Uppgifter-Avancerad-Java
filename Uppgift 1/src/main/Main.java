@@ -12,14 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class Main {
-	//Global Vaiables
+	// Global Vaiables
 	static boolean player;
 	static JLabel welcome = new JLabel("Welcome to Tic Tac Toe!");
 	static JLabel playerTurn = new JLabel();
 	static JLabel errorMessage = new JLabel();
 	static JFrame frame = new JFrame("Tic Tac Toe!");
 	static JButton exit = new JButton("Exit");
-	static JButton play = new JButton("Play Again!");
 	static JButton resetbtn = new JButton("Reset");
 	static JButton oneOne = new JButton("[ ]");
 	static JButton oneTwo = new JButton("[ ]");
@@ -35,14 +34,14 @@ public class Main {
 	static boolean gameIsRunning = true;
 
 	public static void main(String[] args) {
-
 		Graphics();
+		PlaceToken();
 		StartGame();
 		Play();
 	}
 
 	private static void Play() {
-		//Event Listener that allows for a player to end the game at any time
+		// Event Listener that allows for a player to end the game at any time
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -57,10 +56,8 @@ public class Main {
 		while (gameIsRunning) {
 			if (player) {
 				playerTurn.setText("Player X Choose");
-				PlaceToken();
 			} else if (!player) {
 				playerTurn.setText("Player O Choose");
-				PlaceToken();
 			} else {
 				System.out.println("Error");
 				gameIsRunning = false;
@@ -136,25 +133,22 @@ public class Main {
 		}
 		// If X wins
 		if (xWin) {
-			playerTurn.setText("Congratulations X, You Won!");
-			gameIsRunning=false;
-			PlayAgain();
+			errorMessage.setText("Congratulations X, You Won!");
+			RestartGame();
 			// If O wins
 		} else if (oWin) {
-			playerTurn.setText("Congratulations O, You Won!");
-			gameIsRunning=false;			
-			PlayAgain();
+			errorMessage.setText("Congratulations O, You Won!");
+			RestartGame();
 			// If it's a draw
 		} else if (draw) {
-			playerTurn.setText("It's a Draw!");
-			gameIsRunning=false;			
-			PlayAgain();
+			errorMessage.setText("It's a Draw!");
+			RestartGame();
 		} else {
-			// If none wins
+			// No victory
 		}
-
 	}
 
+	// Tests if it's a draw
 	private static boolean CheckForDraw() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -164,19 +158,6 @@ public class Main {
 			}
 		}
 		return true;
-	}
-
-	// Asks if the player(s) wants to play again
-	private static void PlayAgain() {
-		play.setBounds(100, 200, 150, 25);
-		frame.add(play);
-		play.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				gameIsRunning=true;
-				RestartGame();
-				frame.remove(play);
-			}
-		});
 	}
 
 	// Initialising of the game board
@@ -193,217 +174,184 @@ public class Main {
 
 	// Resets the game
 	private static void RestartGame() {
-		gameboardX.clear();
-		StartGame();
+		try {
+			Thread.sleep(1000);
+			oneOne.setText("[ ]");
+			oneTwo.setText("[ ]");
+			oneThree.setText("[ ]");
+			twoOne.setText("[ ]");
+			twoTwo.setText("[ ]");
+			twoThree.setText("[ ]");
+			threeOne.setText("[ ]");
+			threeTwo.setText("[ ]");
+			threeThree.setText("[ ]");
+			gameboardX.clear();
+			StartGame();
+		} catch (InterruptedException e) {
+			oneOne.setText("[ ]");
+			oneTwo.setText("[ ]");
+			oneThree.setText("[ ]");
+			twoOne.setText("[ ]");
+			twoTwo.setText("[ ]");
+			twoThree.setText("[ ]");
+			threeOne.setText("[ ]");
+			threeTwo.setText("[ ]");
+			threeThree.setText("[ ]");
+			gameboardX.clear();
+			StartGame();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
-	// Handles the Player Choices
+	// Sets all the event listeners
 	private static void PlaceToken() {
 		String emptySpace = "[ ]", xToken = "[x]", oToken = "[o]", message = "That Space is already taken! Try again!";
-		if (player) {
-			// player X
-			oneOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneOne.getText().equals(emptySpace)) {
+		oneOne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (oneOne.getText().equals(emptySpace)) {
+					if (player) {
 						gameboardX.get(0).set(0, xToken);
 						oneOne.setText(xToken);
-						player = !player;
 					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			oneTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneTwo.getText().equals(emptySpace)) {
-						gameboardX.get(1).set(0, xToken);
-						oneTwo.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			oneThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneThree.getText().equals(emptySpace)) {
-						gameboardX.get(2).set(0, xToken);
-						oneThree.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			twoOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoOne.getText().equals(emptySpace)) {
-						gameboardX.get(0).set(1, xToken);
-						twoOne.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			twoTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoTwo.getText().equals(emptySpace)) {
-						gameboardX.get(1).set(1, xToken);
-						twoTwo.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			twoThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoThree.getText().equals(emptySpace)) {
-						gameboardX.get(2).set(1, xToken);
-						twoThree.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			threeOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeOne.getText().equals(emptySpace)) {
-						gameboardX.get(0).set(2, xToken);
-						threeOne.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			threeTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeTwo.getText().equals(emptySpace)) {
-						gameboardX.get(1).set(2, xToken);
-						threeTwo.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-			threeThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeThree.getText().equals(emptySpace)) {
-						gameboardX.get(2).set(2, xToken);
-						threeThree.setText(xToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
-					}
-				}
-			});
-
-		} else {
-			// Player O
-			oneOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneOne.getText().equals(emptySpace)) {
 						gameboardX.get(0).set(0, oToken);
 						oneOne.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			oneTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneTwo.getText().equals(emptySpace)) {
+			}
+		});
+		oneTwo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (oneTwo.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(1).set(0, xToken);
+						oneTwo.setText(xToken);
+					} else {
 						gameboardX.get(1).set(0, oToken);
 						oneTwo.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			oneThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (oneThree.getText().equals(emptySpace)) {
+			}
+		});
+		oneThree.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (oneThree.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(2).set(0, xToken);
+						oneThree.setText(xToken);
+					} else {
 						gameboardX.get(2).set(0, oToken);
 						oneThree.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			twoOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoOne.getText().equals(emptySpace)) {
+			}
+		});
+		twoOne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (twoOne.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(0).set(1, xToken);
+						twoOne.setText(xToken);
+					} else {
 						gameboardX.get(0).set(1, oToken);
 						twoOne.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			twoTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoTwo.getText().equals(emptySpace)) {
+			}
+		});
+		twoTwo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (twoTwo.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(1).set(1, xToken);
+						twoTwo.setText(xToken);
+					} else {
 						gameboardX.get(1).set(1, oToken);
 						twoTwo.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			twoThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (twoThree.getText().equals(emptySpace)) {
+			}
+		});
+		twoThree.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (twoThree.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(2).set(1, xToken);
+						twoThree.setText(xToken);
+					} else {
 						gameboardX.get(2).set(1, oToken);
 						twoThree.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			threeOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeOne.getText().equals(emptySpace)) {
+			}
+		});
+		threeOne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (threeOne.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(0).set(2, xToken);
+						threeOne.setText(xToken);
+					} else {
 						gameboardX.get(0).set(2, oToken);
 						threeOne.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			threeTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeTwo.getText().equals(emptySpace)) {
+			}
+		});
+		threeTwo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (threeTwo.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(1).set(2, xToken);
+						threeTwo.setText(xToken);
+					} else {
 						gameboardX.get(1).set(2, oToken);
 						threeTwo.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-			threeThree.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (threeThree.getText().equals(emptySpace)) {
+			}
+		});
+		threeThree.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (threeThree.getText().equals(emptySpace)) {
+					if (player) {
+						gameboardX.get(2).set(2, xToken);
+						threeThree.setText(xToken);
+					} else {
 						gameboardX.get(2).set(2, oToken);
 						threeThree.setText(oToken);
-						player = !player;
-					} else {
-						errorMessage.setText(message);
 					}
+					player = !player;
+				} else {
+					errorMessage.setText(message);
 				}
-			});
-		}
+			}
+		});
 	}
 
 	// Draws up all the graphics
@@ -439,24 +387,15 @@ public class Main {
 		frame.add(welcome);
 		frame.add(playerTurn);
 		frame.add(errorMessage);
-		
-		//Sets the parameters of the frame
+
+		// Sets the parameters of the frame
 		frame.setSize(400, 400);
 		frame.setLayout(null);
 		frame.setVisible(true);
-		
-		//Event listener that controls the reset function
+
+		// Event listener that controls the reset function
 		resetbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				oneOne.setText("[ ]");
-				oneTwo.setText("[ ]");
-				oneThree.setText("[ ]");
-				twoOne.setText("[ ]");
-				twoTwo.setText("[ ]");
-				twoThree.setText("[ ]");
-				threeOne.setText("[ ]");
-				threeTwo.setText("[ ]");
-				threeThree.setText("[ ]");
 				RestartGame();
 			}
 		});
