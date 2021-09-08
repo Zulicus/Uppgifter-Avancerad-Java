@@ -2,111 +2,79 @@ package main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class Main {
+	//Global Vaiables
 	static boolean player;
+	static JLabel welcome = new JLabel("Welcome to Tic Tac Toe!");
+	static JLabel playerTurn = new JLabel();
+	static JLabel errorMessage = new JLabel();
+	static JFrame frame = new JFrame("Tic Tac Toe!");
+	static JButton exit = new JButton("Exit");
+	static JButton play = new JButton("Play Again!");
+	static JButton resetbtn = new JButton("Reset");
+	static JButton oneOne = new JButton("[ ]");
+	static JButton oneTwo = new JButton("[ ]");
+	static JButton oneThree = new JButton("[ ]");
+	static JButton twoOne = new JButton("[ ]");
+	static JButton twoTwo = new JButton("[ ]");
+	static JButton twoThree = new JButton("[ ]");
+	static JButton threeOne = new JButton("[ ]");
+	static JButton threeTwo = new JButton("[ ]");
+	static JButton threeThree = new JButton("[ ]");
+	static ArrayList<ArrayList<String>> gameboardX = new ArrayList<ArrayList<String>>();
+	static Random rand = new Random();
+	static boolean gameIsRunning = true;
 
 	public static void main(String[] args) {
+
 		Graphics();
-
-		System.out.println("Welcome to Tic Tac Toe!");
+		StartGame();
 		Play();
-		System.out.println("Thank you for Playing!");
-	}
-
-	private static void Graphics() {
-		JLabel welcome = new JLabel("Welcome to Tic Tac Toe!");
-		JLabel player = new JLabel();
-
-		JFrame frame = new JFrame("Tic Tac Toe!");
-
-		JButton resetbtn = new JButton("Reset");
-		JButton oneOne = new JButton("[ ]");
-		JButton oneTwo = new JButton("[ ]");
-		JButton oneThree = new JButton("[ ]");
-		JButton twoOne = new JButton("[ ]");
-		JButton twoTwo = new JButton("[ ]");
-		JButton twoThree = new JButton("[ ]");
-		JButton threeOne = new JButton("[ ]");
-		JButton threeTwo = new JButton("[ ]");
-		JButton threeThree = new JButton("[ ]");
-
-		welcome.setBounds(50, 5, 150, 25);
-		player.setBounds(75, 25, 150, 25);
-
-		resetbtn.setBounds(50, 225, 75, 25);
-		oneOne.setBounds(50, 50, 50, 50);
-		oneTwo.setBounds(100, 50, 50, 50);
-		oneThree.setBounds(150, 50, 50, 50);
-		twoOne.setBounds(50, 100, 50, 50);
-		twoTwo.setBounds(100, 100, 50, 50);
-		twoThree.setBounds(150, 100, 50, 50);
-		threeOne.setBounds(50, 150, 50, 50);
-		threeTwo.setBounds(100, 150, 50, 50);
-		threeThree.setBounds(150, 150, 50, 50);
-
-		frame.add(resetbtn);
-		frame.add(oneOne);
-		frame.add(oneTwo);
-		frame.add(oneThree);
-		frame.add(twoOne);
-		frame.add(twoTwo);
-		frame.add(twoThree);
-		frame.add(threeOne);
-		frame.add(threeTwo);
-		frame.add(threeThree);
-		frame.add(welcome);
-		frame.add(player);
-
-		frame.setSize(400, 400);
-		frame.setLayout(null);
-		frame.setVisible(true);
-
-		resetbtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				player.setText("Player O Choose");
-			}
-		});
-
 	}
 
 	private static void Play() {
-		ArrayList<ArrayList<String>> gameboardX = new ArrayList<ArrayList<String>>();
-		System.out.println("Choose A coordinate to place your token. Example: '1.3'");
-		Random rand = new Random();
-		StartGame(gameboardX, rand);
-		boolean gameIsRunning = true;
-		Scanner scan = new Scanner(System.in);
+		//Event Listener that allows for a player to end the game at any time
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Thread.sleep(1000);
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				} catch (InterruptedException e1) {
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+					e1.printStackTrace();
+				}
+			}
+		});
 		while (gameIsRunning) {
 			if (player) {
-				System.out.println("Player X Choose");
-				player = PlaceToken(gameboardX, player, scan.nextLine());
+				playerTurn.setText("Player X Choose");
+				PlaceToken();
 			} else if (!player) {
-				System.out.println("Player O Choose");
-				player = PlaceToken(gameboardX, player, scan.nextLine());
+				playerTurn.setText("Player O Choose");
+				PlaceToken();
 			} else {
 				System.out.println("Error");
 				gameIsRunning = false;
 			}
-			DisplayGameboard(gameboardX);
-			gameIsRunning = WinCondition(gameboardX, scan, rand);
+			WinCondition();
 		}
-		scan.close();
 
 	}
 
 	// Checks if anyone won
-	private static boolean WinCondition(ArrayList<ArrayList<String>> gameboardX, Scanner scan, Random rand) {
+	private static void WinCondition() {
 		boolean xWin = false, oWin = false, draw = false;
 		// Checks for a Draw
-		draw = CheckForDraw(gameboardX);
+		draw = CheckForDraw();
 
 		// Checks Vertical
 		for (int i = 0; i < 3; i++) {
@@ -168,25 +136,26 @@ public class Main {
 		}
 		// If X wins
 		if (xWin) {
-			System.out.println("Congratulations X, You Won!");
-			return PlayAgain(gameboardX, scan, rand);
+			playerTurn.setText("Congratulations X, You Won!");
+			gameIsRunning=false;
+			PlayAgain();
 			// If O wins
 		} else if (oWin) {
-			System.out.println("Congratulations O, You Won!");
-			return PlayAgain(gameboardX, scan, rand);
+			playerTurn.setText("Congratulations O, You Won!");
+			gameIsRunning=false;			
+			PlayAgain();
 			// If it's a draw
 		} else if (draw) {
-			System.out.println("It's a Draw!");
-			return PlayAgain(gameboardX, scan, rand);
-
+			playerTurn.setText("It's a Draw!");
+			gameIsRunning=false;			
+			PlayAgain();
 		} else {
 			// If none wins
-			return true;
 		}
 
 	}
 
-	private static boolean CheckForDraw(ArrayList<ArrayList<String>> gameboardX) {
+	private static boolean CheckForDraw() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (gameboardX.get(i).get(j).equals("[ ]")) {
@@ -197,22 +166,21 @@ public class Main {
 		return true;
 	}
 
-	// Asks if the player(s) wanna play again
-	private static boolean PlayAgain(ArrayList<ArrayList<String>> gameboardX, Scanner scan, Random rand) {
-		System.out.println("Play again? Y/N");
-		String input = scan.nextLine();
-		if (input.equals("y")) {
-			RestartGame(gameboardX, rand);
-			return true;
-		} else if (input.equals("n")) {
-			return false;
-		} else {
-			return false;
-		}
+	// Asks if the player(s) wants to play again
+	private static void PlayAgain() {
+		play.setBounds(100, 200, 150, 25);
+		frame.add(play);
+		play.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gameIsRunning=true;
+				RestartGame();
+				frame.remove(play);
+			}
+		});
 	}
 
-	// Initialising of the gameboard
-	private static void StartGame(ArrayList<ArrayList<String>> gameboardX, Random rand) {
+	// Initialising of the game board
+	private static void StartGame() {
 		for (int i = 0; i < 3; i++) {
 			ArrayList<String> gameboardY = new ArrayList<String>();
 			for (int j = 0; j < 3; j++) {
@@ -221,190 +189,277 @@ public class Main {
 			gameboardX.add(gameboardY);
 		}
 		player = rand.nextBoolean();
-		DisplayGameboard(gameboardX);
-	}
-
-	// Displays whatever is on the gameboard
-	private static void DisplayGameboard(ArrayList<ArrayList<String>> gameboardX) {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				System.out.print(gameboardX.get(i).get(j));
-			}
-			System.out.println("");
-		}
-
 	}
 
 	// Resets the game
-	private static void RestartGame(ArrayList<ArrayList<String>> gameboardX, Random rand) {
+	private static void RestartGame() {
 		gameboardX.clear();
-		StartGame(gameboardX, rand);
+		StartGame();
 	}
 
-	// Handles the Player Choises
-	private static boolean PlaceToken(ArrayList<ArrayList<String>> gameboardX, boolean player, String choice) {
-		String emptySpace = "[ ]", xToken = "[x]", oToken = "[o]",
-				errorMessage = "That Space is already taken! Try again!";
+	// Handles the Player Choices
+	private static void PlaceToken() {
+		String emptySpace = "[ ]", xToken = "[x]", oToken = "[o]", message = "That Space is already taken! Try again!";
 		if (player) {
 			// player X
-			switch (choice) {
-			case "1.1":
-				if (gameboardX.get(0).get(0).equals(emptySpace)) {
-					gameboardX.get(0).set(0, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			oneOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(0, xToken);
+						oneOne.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.1":
-				if (gameboardX.get(0).get(1).equals(emptySpace)) {
-					gameboardX.get(0).set(1, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			oneTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(0, xToken);
+						oneTwo.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.1":
-				if (gameboardX.get(0).get(2).equals(emptySpace)) {
-					gameboardX.get(0).set(2, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			oneThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(0, xToken);
+						oneThree.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "1.2":
-				if (gameboardX.get(1).get(0).equals(emptySpace)) {
-					gameboardX.get(1).set(0, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(1, xToken);
+						twoOne.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.2":
-				if (gameboardX.get(1).get(1).equals(emptySpace)) {
-					gameboardX.get(1).set(1, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(1, xToken);
+						twoTwo.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.2":
-				if (gameboardX.get(1).get(2).equals(emptySpace)) {
-					gameboardX.get(1).set(2, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(1, xToken);
+						twoThree.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "1.3":
-				if (gameboardX.get(2).get(0).equals(emptySpace)) {
-					gameboardX.get(2).set(0, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(2, xToken);
+						threeOne.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.3":
-				if (gameboardX.get(2).get(1).equals(emptySpace)) {
-					gameboardX.get(2).set(1, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(2, xToken);
+						threeTwo.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.3":
-				if (gameboardX.get(2).get(2).equals(emptySpace)) {
-					gameboardX.get(2).set(2, xToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(2, xToken);
+						threeThree.setText(xToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			default:
-				System.out.println("Invalid input, try again");
-				return player;
-			}
+			});
 
 		} else {
 			// Player O
-			switch (choice) {
-			case "1.1":
-				if (gameboardX.get(0).get(0).equals(emptySpace)) {
-					gameboardX.get(0).set(0, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			oneOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(0, oToken);
+						oneOne.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.1":
-				if (gameboardX.get(0).get(1).equals(emptySpace)) {
-					gameboardX.get(0).set(1, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			oneTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(0, oToken);
+						oneTwo.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.1":
-				if (gameboardX.get(0).get(2).equals(emptySpace)) {
-					gameboardX.get(0).set(2, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			oneThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (oneThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(0, oToken);
+						oneThree.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "1.2":
-				if (gameboardX.get(1).get(0).equals(emptySpace)) {
-					gameboardX.get(1).set(0, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(1, oToken);
+						twoOne.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.2":
-				if (gameboardX.get(1).get(1).equals(emptySpace)) {
-					gameboardX.get(1).set(1, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(1, oToken);
+						twoTwo.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.2":
-				if (gameboardX.get(1).get(2).equals(emptySpace)) {
-					gameboardX.get(1).set(2, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			twoThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (twoThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(1, oToken);
+						twoThree.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "1.3":
-				if (gameboardX.get(2).get(0).equals(emptySpace)) {
-					gameboardX.get(2).set(0, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeOne.getText().equals(emptySpace)) {
+						gameboardX.get(0).set(2, oToken);
+						threeOne.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "2.3":
-				if (gameboardX.get(2).get(1).equals(emptySpace)) {
-					gameboardX.get(2).set(1, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeTwo.getText().equals(emptySpace)) {
+						gameboardX.get(1).set(2, oToken);
+						threeTwo.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			case "3.3":
-				if (gameboardX.get(2).get(2).equals(emptySpace)) {
-					gameboardX.get(2).set(2, oToken);
-					return !player;
-				} else {
-					System.out.println(errorMessage);
+			});
+			threeThree.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (threeThree.getText().equals(emptySpace)) {
+						gameboardX.get(2).set(2, oToken);
+						threeThree.setText(oToken);
+						player = !player;
+					} else {
+						errorMessage.setText(message);
+					}
 				}
-				return player;
-			default:
-				System.out.println("Invalid input, try again");
-				return player;
-			}
+			});
 		}
+	}
+
+	// Draws up all the graphics
+	private static void Graphics() {
+		// Sets the sizes of the components
+		errorMessage.setBounds(50, 200, 350, 25);
+		welcome.setBounds(50, 5, 150, 25);
+		playerTurn.setBounds(75, 25, 350, 25);
+		resetbtn.setBounds(50, 225, 75, 25);
+		exit.setBounds(125, 225, 75, 25);
+		oneOne.setBounds(50, 50, 50, 50);
+		oneTwo.setBounds(100, 50, 50, 50);
+		oneThree.setBounds(150, 50, 50, 50);
+		twoOne.setBounds(50, 100, 50, 50);
+		twoTwo.setBounds(100, 100, 50, 50);
+		twoThree.setBounds(150, 100, 50, 50);
+		threeOne.setBounds(50, 150, 50, 50);
+		threeTwo.setBounds(100, 150, 50, 50);
+		threeThree.setBounds(150, 150, 50, 50);
+
+		// Adds the components to the frame
+		frame.add(exit);
+		frame.add(resetbtn);
+		frame.add(oneOne);
+		frame.add(oneTwo);
+		frame.add(oneThree);
+		frame.add(twoOne);
+		frame.add(twoTwo);
+		frame.add(twoThree);
+		frame.add(threeOne);
+		frame.add(threeTwo);
+		frame.add(threeThree);
+		frame.add(welcome);
+		frame.add(playerTurn);
+		frame.add(errorMessage);
+		
+		//Sets the parameters of the frame
+		frame.setSize(400, 400);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		
+		//Event listener that controls the reset function
+		resetbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				oneOne.setText("[ ]");
+				oneTwo.setText("[ ]");
+				oneThree.setText("[ ]");
+				twoOne.setText("[ ]");
+				twoTwo.setText("[ ]");
+				twoThree.setText("[ ]");
+				threeOne.setText("[ ]");
+				threeTwo.setText("[ ]");
+				threeThree.setText("[ ]");
+				RestartGame();
+			}
+		});
 
 	}
 }
