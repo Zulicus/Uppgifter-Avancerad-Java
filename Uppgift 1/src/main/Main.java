@@ -1,11 +1,14 @@
 package main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Main {
 	static boolean player;
@@ -19,14 +22,12 @@ public class Main {
 	}
 
 	private static void Graphics() {
-		JFrame frame = new JFrame();
-		JButton btn = new JButton("Start");
-		btn.setBounds(300, 250, 100, 25);
-		frame.add(btn);
-		frame.setSize(700, 500);
-		frame.setLayout(null);
-		frame.setVisible(true);
+		JLabel welcome = new JLabel("Welcome to Tic Tac Toe!");
+		JLabel player = new JLabel();
 
+		JFrame frame = new JFrame("Tic Tac Toe!");
+
+		JButton resetbtn = new JButton("Reset");
 		JButton oneOne = new JButton("[ ]");
 		JButton oneTwo = new JButton("[ ]");
 		JButton oneThree = new JButton("[ ]");
@@ -36,9 +37,22 @@ public class Main {
 		JButton threeOne = new JButton("[ ]");
 		JButton threeTwo = new JButton("[ ]");
 		JButton threeThree = new JButton("[ ]");
-		oneOne.setBounds(200,100,50,50);
-		oneTwo.setBounds(250,100,50,50);
-		oneThree.setBounds(300,200,50,50);
+
+		welcome.setBounds(50, 5, 150, 25);
+		player.setBounds(75, 25, 150, 25);
+
+		resetbtn.setBounds(50, 225, 75, 25);
+		oneOne.setBounds(50, 50, 50, 50);
+		oneTwo.setBounds(100, 50, 50, 50);
+		oneThree.setBounds(150, 50, 50, 50);
+		twoOne.setBounds(50, 100, 50, 50);
+		twoTwo.setBounds(100, 100, 50, 50);
+		twoThree.setBounds(150, 100, 50, 50);
+		threeOne.setBounds(50, 150, 50, 50);
+		threeTwo.setBounds(100, 150, 50, 50);
+		threeThree.setBounds(150, 150, 50, 50);
+
+		frame.add(resetbtn);
 		frame.add(oneOne);
 		frame.add(oneTwo);
 		frame.add(oneThree);
@@ -48,6 +62,18 @@ public class Main {
 		frame.add(threeOne);
 		frame.add(threeTwo);
 		frame.add(threeThree);
+		frame.add(welcome);
+		frame.add(player);
+
+		frame.setSize(400, 400);
+		frame.setLayout(null);
+		frame.setVisible(true);
+
+		resetbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				player.setText("Player O Choose");
+			}
+		});
 
 	}
 
