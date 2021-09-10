@@ -10,13 +10,6 @@ public class PlaySound {
 	public Clip clip;
 
 	public void play(String file) {
-		// This stops any currently running sounds so there's no overlap
-		try {
-			clip.stop();
-			clip.close();
-		} catch (Exception exc) {
-			System.out.println(exc);
-		}
 		// Plays the selected file
 		try {
 			clip = AudioSystem.getClip();
