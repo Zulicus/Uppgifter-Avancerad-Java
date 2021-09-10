@@ -20,15 +20,15 @@ public class Main {
 	static JFrame frame = new JFrame("Tic Tac Toe!");
 	static JButton exit = new JButton("Exit");
 	static JButton resetbtn = new JButton("Reset");
-	static JButton oneOne = new JButton("[ ]");
-	static JButton oneTwo = new JButton("[ ]");
-	static JButton oneThree = new JButton("[ ]");
-	static JButton twoOne = new JButton("[ ]");
-	static JButton twoTwo = new JButton("[ ]");
-	static JButton twoThree = new JButton("[ ]");
-	static JButton threeOne = new JButton("[ ]");
-	static JButton threeTwo = new JButton("[ ]");
-	static JButton threeThree = new JButton("[ ]");
+	static JButton oneOne = new JButton(" ");
+	static JButton oneTwo = new JButton(" ");
+	static JButton oneThree = new JButton(" ");
+	static JButton twoOne = new JButton(" ");
+	static JButton twoTwo = new JButton(" ");
+	static JButton twoThree = new JButton(" ");
+	static JButton threeOne = new JButton(" ");
+	static JButton threeTwo = new JButton(" ");
+	static JButton threeThree = new JButton(" ");
 	static ArrayList<ArrayList<String>> gameboardX = new ArrayList<ArrayList<String>>();
 	static Random rand = new Random();
 	static boolean gameIsRunning = true;
@@ -76,9 +76,9 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			if (gameboardX.get(i).get(0).equals(gameboardX.get(i).get(1))
 					&& gameboardX.get(i).get(0).equals(gameboardX.get(i).get(2))) {
-				if (gameboardX.get(i).get(0) == "[x]") {
+				if (gameboardX.get(i).get(0) == "X") {
 					xWin = true;
-				} else if (gameboardX.get(i).get(0) == "[o]") {
+				} else if (gameboardX.get(i).get(0) == "O") {
 					oWin = true;
 				} else {
 					xWin = false;
@@ -91,9 +91,9 @@ public class Main {
 			for (int i = 0; i < 3; i++) {
 				if (gameboardX.get(0).get(i).equals(gameboardX.get(1).get(i))
 						&& gameboardX.get(0).get(i).equals(gameboardX.get(2).get(i))) {
-					if (gameboardX.get(0).get(i) == "[x]") {
+					if (gameboardX.get(0).get(i) == "X") {
 						xWin = true;
-					} else if (gameboardX.get(0).get(i) == "[o]") {
+					} else if (gameboardX.get(0).get(i) == "O") {
 						oWin = true;
 					} else {
 						xWin = false;
@@ -106,9 +106,9 @@ public class Main {
 		if (!xWin && !oWin) {
 			if (gameboardX.get(0).get(0).equals(gameboardX.get(1).get(1))
 					&& gameboardX.get(0).get(0).equals(gameboardX.get(2).get(2))) {
-				if (gameboardX.get(1).get(1) == "[x]") {
+				if (gameboardX.get(1).get(1) == "X") {
 					xWin = true;
-				} else if (gameboardX.get(1).get(1) == "[o]") {
+				} else if (gameboardX.get(1).get(1) == "O") {
 					oWin = true;
 				} else {
 					xWin = false;
@@ -120,9 +120,9 @@ public class Main {
 		if (!xWin && !oWin) {
 			if (gameboardX.get(2).get(0).equals(gameboardX.get(1).get(1))
 					&& gameboardX.get(2).get(0).equals(gameboardX.get(0).get(2))) {
-				if (gameboardX.get(1).get(1) == "[x]") {
+				if (gameboardX.get(1).get(1) == "X") {
 					xWin = true;
-				} else if (gameboardX.get(1).get(1) == "[o]") {
+				} else if (gameboardX.get(1).get(1) == "O") {
 					oWin = true;
 				} else {
 					xWin = false;
@@ -154,7 +154,7 @@ public class Main {
 	private static boolean CheckForDraw() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (gameboardX.get(i).get(j).equals("[ ]")) {
+				if (gameboardX.get(i).get(j).equals(" ")) {
 					return false;
 				}
 			}
@@ -167,7 +167,7 @@ public class Main {
 		for (int i = 0; i < 3; i++) {
 			ArrayList<String> gameboardY = new ArrayList<String>();
 			for (int j = 0; j < 3; j++) {
-				gameboardY.add("[ ]");
+				gameboardY.add(" ");
 			}
 			gameboardX.add(gameboardY);
 		}
@@ -178,27 +178,27 @@ public class Main {
 	private static void RestartGame() {
 		try {
 			Thread.sleep(1000);
-			oneOne.setText("[ ]");
-			oneTwo.setText("[ ]");
-			oneThree.setText("[ ]");
-			twoOne.setText("[ ]");
-			twoTwo.setText("[ ]");
-			twoThree.setText("[ ]");
-			threeOne.setText("[ ]");
-			threeTwo.setText("[ ]");
-			threeThree.setText("[ ]");
+			oneOne.setText(" ");
+			oneTwo.setText(" ");
+			oneThree.setText(" ");
+			twoOne.setText(" ");
+			twoTwo.setText(" ");
+			twoThree.setText(" ");
+			threeOne.setText(" ");
+			threeTwo.setText(" ");
+			threeThree.setText(" ");
 			gameboardX.clear();
 			StartGame();
 		} catch (InterruptedException e) {
-			oneOne.setText("[ ]");
-			oneTwo.setText("[ ]");
-			oneThree.setText("[ ]");
-			twoOne.setText("[ ]");
-			twoTwo.setText("[ ]");
-			twoThree.setText("[ ]");
-			threeOne.setText("[ ]");
-			threeTwo.setText("[ ]");
-			threeThree.setText("[ ]");
+			oneOne.setText(" ");
+			oneTwo.setText(" ");
+			oneThree.setText(" ");
+			twoOne.setText(" ");
+			twoTwo.setText(" ");
+			twoThree.setText(" ");
+			threeOne.setText(" ");
+			threeTwo.setText(" ");
+			threeThree.setText(" ");
 			gameboardX.clear();
 			StartGame();
 			e.printStackTrace();
@@ -207,7 +207,7 @@ public class Main {
 
 	// Sets all the event listeners
 	private static void PlaceToken() {
-		String emptySpace = "[ ]", xToken = "[x]", oToken = "[o]", message = "That Space is already taken! Try again!";
+		String emptySpace = " ", xToken = "X", oToken = "O", message = "That Space is already taken! Try again!";
 		oneOne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (oneOne.getText().equals(emptySpace)) {

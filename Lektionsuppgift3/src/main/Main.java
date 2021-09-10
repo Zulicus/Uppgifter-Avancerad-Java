@@ -1,8 +1,9 @@
 package main;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +17,8 @@ public class Main {
 		JButton btn = new JButton("Calculate");
 		btn.setBounds(125, 50, 100, 25);
 		message.setBounds(50, 50, 75, 25);
+		Image icon = Toolkit.getDefaultToolkit().getImage("Images\\jad.jpg");    
+		frame.setIconImage(icon);    
 		frame.add(btn);
 		frame.add(message);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
