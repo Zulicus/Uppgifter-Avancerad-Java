@@ -3,13 +3,13 @@ package main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.WindowConstants;
 
 public class Main {
 	// Global Vaiables
@@ -32,6 +32,7 @@ public class Main {
 	static ArrayList<ArrayList<String>> gameboardX = new ArrayList<ArrayList<String>>();
 	static Random rand = new Random();
 	static boolean gameIsRunning = true;
+	static PlaySound run = new PlaySound();
 
 	public static void main(String[] args) {
 		Graphics();
@@ -64,7 +65,6 @@ public class Main {
 			}
 			WinCondition();
 		}
-
 	}
 
 	// Checks if anyone won
@@ -72,7 +72,6 @@ public class Main {
 		boolean xWin = false, oWin = false, draw = false;
 		// Checks for a Draw
 		draw = CheckForDraw();
-
 		// Checks Vertical
 		for (int i = 0; i < 3; i++) {
 			if (gameboardX.get(i).get(0).equals(gameboardX.get(i).get(1))
@@ -134,14 +133,17 @@ public class Main {
 		// If X wins
 		if (xWin) {
 			errorMessage.setText("Congratulations X, You Won!");
+			PlayVictory();
 			RestartGame();
 			// If O wins
 		} else if (oWin) {
 			errorMessage.setText("Congratulations O, You Won!");
+			PlayVictory();
 			RestartGame();
 			// If it's a draw
 		} else if (draw) {
 			errorMessage.setText("It's a Draw!");
+			PlayVictory();
 			RestartGame();
 		} else {
 			// No victory
@@ -199,10 +201,8 @@ public class Main {
 			threeThree.setText("[ ]");
 			gameboardX.clear();
 			StartGame();
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	// Sets all the event listeners
@@ -214,9 +214,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(0).set(0, xToken);
 						oneOne.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(0).set(0, oToken);
 						oneOne.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -230,9 +232,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(1).set(0, xToken);
 						oneTwo.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(1).set(0, oToken);
 						oneTwo.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -246,9 +250,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(2).set(0, xToken);
 						oneThree.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(2).set(0, oToken);
 						oneThree.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -262,9 +268,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(0).set(1, xToken);
 						twoOne.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(0).set(1, oToken);
 						twoOne.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -278,9 +286,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(1).set(1, xToken);
 						twoTwo.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(1).set(1, oToken);
 						twoTwo.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -294,9 +304,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(2).set(1, xToken);
 						twoThree.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(2).set(1, oToken);
 						twoThree.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -310,9 +322,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(0).set(2, xToken);
 						threeOne.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(0).set(2, oToken);
 						threeOne.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -326,9 +340,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(1).set(2, xToken);
 						threeTwo.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(1).set(2, oToken);
 						threeTwo.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -342,9 +358,11 @@ public class Main {
 					if (player) {
 						gameboardX.get(2).set(2, xToken);
 						threeThree.setText(xToken);
+						PlayX();
 					} else {
 						gameboardX.get(2).set(2, oToken);
 						threeThree.setText(oToken);
+						PlayO();
 					}
 					player = !player;
 				} else {
@@ -352,6 +370,22 @@ public class Main {
 				}
 			}
 		});
+	}
+
+	// Sound for when player X places their token
+	private static void PlayX() {
+		run.play("Sounds/x.wav");
+	}
+
+	// Sound for when Player O places their token
+	private static void PlayO() {
+		run.play("Sounds/o.wav");
+	}
+
+	// Sound that plays when game ends
+	private static void PlayVictory() {
+		run.play("Sounds/victory.wav");
+
 	}
 
 	// Draws up all the graphics
@@ -371,7 +405,6 @@ public class Main {
 		threeOne.setBounds(50, 150, 50, 50);
 		threeTwo.setBounds(100, 150, 50, 50);
 		threeThree.setBounds(150, 150, 50, 50);
-
 		// Adds the components to the frame
 		frame.add(exit);
 		frame.add(resetbtn);
@@ -387,18 +420,16 @@ public class Main {
 		frame.add(welcome);
 		frame.add(playerTurn);
 		frame.add(errorMessage);
-
 		// Sets the parameters of the frame
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setSize(400, 400);
 		frame.setLayout(null);
 		frame.setVisible(true);
-
 		// Event listener that controls the reset function
 		resetbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RestartGame();
 			}
 		});
-
 	}
 }
