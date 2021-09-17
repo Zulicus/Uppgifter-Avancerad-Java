@@ -11,9 +11,11 @@ public class Row {
 	private String UnitCost = " ";
 	private String Total = " ";
 
+	// Constructs a new Row
 	public Row(String line) {
 		super();
 		if (line.split(",").length < 8) {
+			// If the first cell is empty
 			if (line.charAt(0) == ',') {
 				this.Region = line.split(",")[1];
 				this.Rep1 = line.split(",")[2];
@@ -22,6 +24,7 @@ public class Row {
 				this.Units = line.split(",")[5];
 				this.UnitCost = line.split(",")[6];
 				this.Total = line.split(",")[7];
+				// If the last cell is empty
 			} else if (line.charAt(line.length() - 1) == ',') {
 				this.OrderDate = line.split(",")[0];
 				this.Region = line.split(",")[1];
@@ -30,8 +33,10 @@ public class Row {
 				this.Item = line.split(",")[4];
 				this.Units = line.split(",")[5];
 				this.UnitCost = line.split(",")[6];
+				// Looks for two ',' in a row sidnaling that that cell is empty
 			} else {
 				boolean checker = false;
+				// Keeps track of which cell is empty
 				int counter = 0;
 				for (int i = 0; i < line.length(); i++) {
 					System.out.println(counter);
@@ -113,6 +118,7 @@ public class Row {
 					break;
 				}
 			}
+			// The last cell sometimes contains a ','
 		} else if (line.split(",").length > 8) {
 			this.OrderDate = line.split(",")[0];
 			this.Region = line.split(",")[1];
@@ -121,6 +127,7 @@ public class Row {
 			this.Item = line.split(",")[4];
 			this.Units = line.split(",")[5];
 			this.UnitCost = line.split(",")[6];
+			// This line of code makes sure it doesn't cut off too much
 			this.Total = line.split(",")[7] + "," + line.split(",")[8];
 		} else {
 			this.OrderDate = line.split(",")[0];
@@ -135,8 +142,8 @@ public class Row {
 	}
 
 	public String get() {
-		return OrderDate + ", " + Region + ", " + Rep1 + ", " + Rep2 + ", " + Item + ", " + Units + ", " + UnitCost
-				+ ", " + Total;
+		return OrderDate + "," + Region + "," + Rep1 + "," + Rep2 + "," + Item + "," + Units + "," + UnitCost
+				+ "," + Total;
 	}
 
 	public String getOrderDate() {
