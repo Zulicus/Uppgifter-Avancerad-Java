@@ -1,12 +1,2 @@
 INDEX VERSION 1.131+C:\Users\robin\Documents\GitHub\Avancerad-Java\Uppgifter\.metadata\.plugins\org.eclipse.jdt.core
-1194737558.index
-1732272375.index
-2072667608.index
-4064816552.index
-298195553.index
-3158213301.index
-1392954396.index
-1194066366.index
-3531894453.index
-2378074247.index
-4275268431.index
+378753145.index
