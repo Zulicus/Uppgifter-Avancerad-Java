@@ -8,7 +8,7 @@ public class LightSwitch {
 	private boolean status;
 	private String name;
 
-	LightSwitch(String name,boolean status) {
+	public LightSwitch(String name,boolean status) {
 		this.status=status;
 		this.name=name;
 	}

@@ -2,7 +2,6 @@ package main;
 
 import java.util.ArrayList;
 
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 
 public class Room {

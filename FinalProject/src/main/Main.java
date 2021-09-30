@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import simulation.SimMain;
 
 public class Main extends Application {
+	ArrayList<Room> rooms = new ArrayList<Room>();
 
 	public static void main(String[] args) {
 		launch();
@@ -32,55 +33,48 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		ArrayList<Room>rooms=new ArrayList<Room>();
-		rooms=runSim();
+		rooms = runSim();
 		// UI setup
 		stage.setTitle("Light Controller");
 		// Choice box for room selection
 
-		ToggleButton room1 = new ToggleButton("Livingroom");
-		ToggleButton room2 = new ToggleButton("Bedroom");
-		ToggleButton room3 = new ToggleButton("Kitchen");
-		ToggleButton room4 = new ToggleButton("Hallway");
 		final ToggleGroup group = new ToggleGroup();
-		for(int i=0;i<rooms.size();i++) {
-			group.getToggles().addAll(rooms.get(i).getButton());
+		HBox selection = new HBox();
+		selection.setPadding(new Insets(10));
+		selection.setSpacing(5);
+		for (int i = 0; i < rooms.size(); i++) {
+			ToggleButton button = rooms.get(i).getButton();
+			group.getToggles().addAll(button);
+			selection.getChildren().addAll(button);
 		}
 		VBox lights = new VBox();
 		lights.setPadding(new Insets(10));
 		lights.setSpacing(5);
 		
+		// Button Functionality
+		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				System.out.println(event);
+			}
+		};
+
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, final Toggle toggle, final Toggle new_toggle) {
-				String toggleBtn = "";
-				if(new_toggle==null) {
-					toggleBtn = "";
-				}else {
-					toggleBtn = ((ToggleButton) new_toggle).getText();
-				}
-				switch (toggleBtn) {
-				case "Livingroom":
-					livingroom(lights);
-					break;
-				case "Bedroom":
-					bedroom(lights);
-					break;
-				case "Kitchen":
-					kitchen(lights);
-					break;
-				case "Hallway":
-					hallway(lights);
-					break;
-				default:
-					clear(lights);
-					break;
+				clear(lights);
+				if (new_toggle != null) {
+					for (int i = 0; i < rooms.size(); i++) {
+						if (rooms.get(i).getName() == ((ToggleButton) new_toggle).getText()) {
+							for(int j=0;j<rooms.get(i).getLights().size();j++) {
+								Button light = rooms.get(i).getLights().get(j).getLightSwitch();
+								light.setOnAction(event);
+								lights.getChildren().addAll(light);
+							}
+						}
+					}
 				}
 			}
 		});
-		HBox selection = new HBox();
-		selection.setPadding(new Insets(10));
-		selection.setSpacing(5);
-		selection.getChildren().addAll(room1, room2, room3, room4);
 
 		VBox root = new VBox();
 		root.getChildren().addAll(selection, lights);
@@ -93,14 +87,8 @@ public class Main extends Application {
 		stage.setScene(testScene);
 		stage.show();
 
-		// Button Functionality
-		EventHandler<ActionEvent> e = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
+		
 
-			}
-		};
-		// btn.setOnAction(e);
 	}
 
 	private static ArrayList<Room> runSim() throws Exception {
@@ -108,47 +96,6 @@ public class Main extends Application {
 		Stage secondStage = new Stage();
 		simMain.start(secondStage);
 		return simMain.getRooms();
-	}
-
-	private void livingroom(VBox lights) {
-		clear(lights);
-		Button light1 = new Button("Ceiling Light (TV)");
-		Button light2 = new Button("ceiling Light (Dining)");
-		Button light3 = new Button("Window Light 1");
-		Button light4 = new Button("Window Light 2");
-		Button light5 = new Button("Window Light 3");
-		Button light6 = new Button("Window Light 4");
-		Button light7 = new Button("Floor Light 1");
-		Button light8 = new Button("Floor Light 2");
-		lights.getChildren().addAll(light1, light2, light3, light4, light5, light6, light7, light8);
-	}
-
-	private void bedroom(VBox lights) {
-		clear(lights);
-		Button light1 = new Button("Ceiling Light 1");
-		Button light2 = new Button("Ceiling Light 2");
-		Button light3 = new Button("Window Light");
-		Button light4 = new Button("Night Light");
-		lights.getChildren().addAll(light1, light2, light3, light4);
-	}
-
-	private void kitchen(VBox lights) {
-		clear(lights);
-		Button light1 = new Button("Ceiling Light");
-		Button light2 = new Button("Stove Light");
-		Button light3 = new Button("Workbench Light");
-		Button light4 = new Button("Cupboard Light");
-		Button light5 = new Button("Window Light 1");
-		Button light6 = new Button("Window Light 2");
-		lights.getChildren().addAll(light1, light2, light3, light4, light5, light6);
-	}
-
-	private void hallway(VBox lights) {
-		clear(lights);
-		Button light1 = new Button("Ceiling Light 1");
-		Button light2 = new Button("Ceiling Light 2");
-		Button light3 = new Button("Wall Light");
-		lights.getChildren().addAll(light1, light2, light3);
 	}
 
 	private void clear(VBox lights) {
