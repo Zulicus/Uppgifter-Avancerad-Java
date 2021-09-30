@@ -14,14 +14,10 @@ public class LightSwitch {
 	}
 	public Button getLightSwitch() {
 		Button light= new Button(name);
-		EventHandler<ActionEvent> e = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				status=!status;
-			}
-		};
-		light.setOnAction(e);
 		return  light;
+	}
+	public void toggleStatus() {
+		status=!status;
 	}
 	public boolean getStatus() {
 		return status;

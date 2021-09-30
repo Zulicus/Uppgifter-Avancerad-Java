@@ -5,22 +5,16 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import simulation.SimMain;
 
@@ -33,39 +27,51 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		// Starts the Simulation
 		rooms = runSim();
 		// UI setup
 		stage.setTitle("Light Controller");
-		// Choice box for room selection
-
 		final ToggleGroup group = new ToggleGroup();
+		// The horizontal box for the rooms
 		HBox selection = new HBox();
 		selection.setPadding(new Insets(10));
 		selection.setSpacing(5);
+		// Adding in the buttons from the simulated home
 		for (int i = 0; i < rooms.size(); i++) {
 			ToggleButton button = rooms.get(i).getButton();
 			group.getToggles().addAll(button);
 			selection.getChildren().addAll(button);
 		}
+		// The vertical box for the light buttons
 		VBox lights = new VBox();
 		lights.setPadding(new Insets(10));
 		lights.setSpacing(5);
-		
+
 		// Button Functionality
 		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println(event);
+				for (int i = 0; i < rooms.size(); i++) {
+					for (int j = 0; j < rooms.get(i).getLights().size(); j++) {
+						if (((Button) event.getSource()).getText() == rooms.get(i).getLights().get(j).getName()) {
+							// Toggles the light on or off
+							rooms.get(i).getLights().get(j).toggleStatus();
+						}
+					}
+				}
 			}
 		};
-
+		// Listens for a roomchange
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, final Toggle toggle, final Toggle new_toggle) {
+				// Clears the current light buttons
 				clear(lights);
 				if (new_toggle != null) {
 					for (int i = 0; i < rooms.size(); i++) {
+						// Checks for what room was pressed
 						if (rooms.get(i).getName() == ((ToggleButton) new_toggle).getText()) {
-							for(int j=0;j<rooms.get(i).getLights().size();j++) {
+							for (int j = 0; j < rooms.get(i).getLights().size(); j++) {
+								// Adds in the light buttons for that room
 								Button light = rooms.get(i).getLights().get(j).getLightSwitch();
 								light.setOnAction(event);
 								lights.getChildren().addAll(light);
@@ -75,7 +81,7 @@ public class Main extends Application {
 				}
 			}
 		});
-
+		// Vertical box for all content to be in
 		VBox root = new VBox();
 		root.getChildren().addAll(selection, lights);
 		root.setSpacing(10);
@@ -86,8 +92,6 @@ public class Main extends Application {
 
 		stage.setScene(testScene);
 		stage.show();
-
-		
 
 	}
 
