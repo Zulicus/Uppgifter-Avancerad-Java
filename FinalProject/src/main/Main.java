@@ -29,24 +29,32 @@ public class Main extends Application {
 		// Choice box for room selection
 		final ChoiceBox<String> cb = new ChoiceBox<String>(
 				FXCollections.observableArrayList("Livingroom", "Bedroom", "Kitchen", "Hallway"));
+		
+		Button btn = new Button("!");
+		VBox choiceVBox = new VBox(cb);
+
+		choiceVBox.setPadding(new Insets(50));
+		choiceVBox.setAlignment(Pos.TOP_LEFT);
+		Scene startScene = new Scene(choiceVBox, 1200, 600);
+		
 		cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue ov, Number value, Number new_value) {
 				switch (new_value.intValue()) {
 				case 0:
 					clear();
-					livingroom();
+					livingroom(stage);
 					break;
 				case 1:
 					clear();
-					bedroom();
+					bedroom(stage);
 					break;
 				case 2:
 					clear();
-					kitchen();
+					kitchen(stage);
 					break;
 				case 3:
 					clear();
-					hallway();
+					hallway(stage);
 					break;
 				default:
 					clear();	
@@ -57,13 +65,7 @@ public class Main extends Application {
 
 		});
 
-		Button btn = new Button("!");
-		VBox vBox = new VBox(cb);
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setPadding(new Insets(15));
-		vBox.setAlignment(Pos.TOP_LEFT);
-		Scene livingRoom = new Scene(vBox, 1200, 600);
-		stage.setScene(livingRoom);
+		stage.setScene(startScene);
 		stage.show();
 
 		// Button Functionality
@@ -82,22 +84,26 @@ public class Main extends Application {
 		simMain.start(secondStage);
 	}
 
-	private void livingroom() {
-		// TODO Auto-generated method stub
+	private void livingroom(Stage stage) {
+
+
+		
+		
+		
 		System.out.println("livingroom selected");
 	}
 
-	private void bedroom() {
-		// TODO Auto-generated method stub
+	private void bedroom(Stage stage) {
+		stage.close();
 		System.out.println("bedroom selected");
 	}
 
-	private void kitchen() {
+	private void kitchen(Stage stage) {
 		// TODO Auto-generated method stub
 		System.out.println("kitchen selected");
 	}
 
-	private void hallway() {
+	private void hallway(Stage stage) {
 		// TODO Auto-generated method stub
 		System.out.println("hallway selected");
 	}
