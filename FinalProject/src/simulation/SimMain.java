@@ -2,8 +2,6 @@ package simulation;
 
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -17,13 +15,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import main.Room;
+import main.Main;
 
 public class SimMain extends Application {
-	ArrayList<Room> rooms = new ArrayList<Room>();
+	public static ArrayList<Room> rooms;
 
 	// Creates a second window that shows the lights of the house
 	@Override
 	public void start(Stage stage) throws Exception {
+		rooms = Main.rooms;
 		// UI setup
 		stage.setTitle("Simulation");
 		final ToggleGroup group = new ToggleGroup();
@@ -49,6 +49,8 @@ public class SimMain extends Application {
 								Label nameLabel = new Label(rooms.get(i).getLights().get(j).getName());
 								nameLabel.setStyle("-fx-padding: 3;" + "-fx-border-style: solid inside;");
 								Circle lightIndicator = new Circle(10, 10, 10);
+								/*SimLights simLight = new SimLights(lightIndicator,i,j);
+								simLight.run();*/
 								if (rooms.get(i).getLights().get(j).getState()) {
 									lightIndicator.setFill(javafx.scene.paint.Color.GREEN);
 								} else {
@@ -70,16 +72,10 @@ public class SimMain extends Application {
 		VBox root = new VBox();
 		root.getChildren().addAll(selection, lights);
 		root.setSpacing(10);
-		Scene scene = new Scene(root, 1200, 600);
+		Scene scene = new Scene(root, 300, 600);
 		stage.setScene(scene);
 		stage.show();
 
-		
-
-	}
-
-	public void export(ArrayList<Room> rooms) {
-		this.rooms = rooms;
 	}
 
 	private void clear(VBox lights) {
@@ -87,4 +83,3 @@ public class SimMain extends Application {
 	}
 
 }
-

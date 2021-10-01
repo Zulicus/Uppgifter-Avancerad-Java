@@ -21,7 +21,7 @@ import simulation.SimRun;
 
 public class Main extends Application {
 	static SimMain simMain = new SimMain();
-	ArrayList<Room> rooms = new ArrayList<Room>();
+	public static ArrayList<Room> rooms = new ArrayList<Room>();
 	String status = "";
 
 	public static void main(String[] args) {
@@ -31,8 +31,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		// Starts the Simulation
-		rooms=runSim();
-		simMain.export(rooms);
+		rooms = runSim();
 		Stage secondStage = new Stage();
 		simMain.start(secondStage);
 		// UI setup
@@ -87,7 +86,6 @@ public class Main extends Application {
 									timeToggled.setText(
 											hourString + ":" + minuteString + ":" + secondString + " " + ampmString);
 									timeToggled.setStyle("-fx-padding: 3;" + "-fx-border-style: solid inside;");
-									exportData();
 								});
 								HBox row = new HBox();
 								lights.setStyle("-fx-padding: 3;");
@@ -111,11 +109,6 @@ public class Main extends Application {
 		stage.show();
 	}
 
-	protected void exportData() {
-		simMain.export(rooms);
-
-	}
-
 	// Runs the simulated background
 	private static ArrayList<Room> runSim() {
 		return SimRun.runSim();
@@ -125,7 +118,9 @@ public class Main extends Application {
 	private void clear(VBox lights) {
 		lights.getChildren().clear();
 	}
+
 }
+
 
 //Class that helps with the building of time stamps
 class StringUtilities {

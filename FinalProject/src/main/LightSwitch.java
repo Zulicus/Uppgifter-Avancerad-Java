@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 public class LightSwitch {
 	// Each light switch can be on or off
 	private boolean status;
+	private boolean isDimmable = false;
 	// Each light switch has a name
 	private String name;
 
@@ -18,6 +19,12 @@ public class LightSwitch {
 	// Creates a Button with the name of the light switch as it's text
 	public Button getLightSwitch() {
 		Button light = new Button(name);
+		if (isDimmable) {
+			light = new Button(name);
+
+		} else {
+			light = new Button(name);
+		}
 		return light;
 	}
 
@@ -35,9 +42,9 @@ public class LightSwitch {
 	public String getStatus() {
 		String statusString;
 		if (status) {
-			statusString= "Status: ON";
+			statusString = "Status: ON";
 		} else {
-			statusString= "Status: OFF";
+			statusString = "Status: OFF";
 		}
 		return statusString;
 	}
