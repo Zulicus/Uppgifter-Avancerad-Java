@@ -23,6 +23,9 @@ public class Train extends Thread {
 		this.interval = interval;
 		System.out.println(startTime);
 	}
+	public String time() {
+		return String.valueOf(tempTime + interval);
+	}
 
 	@Override
 	public void run() {

@@ -1,60 +1,90 @@
 package simulation;
 
 import java.util.ArrayList;
-
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import main.LightSwitch;
 import main.Room;
 
 public class SimMain extends Application {
+	ArrayList<Room> rooms = new ArrayList<Room>();
+
+	// Creates a second window that shows the lights of the house
 	@Override
-	public void start(Stage arg0) throws Exception {
+	public void start(Stage stage) throws Exception {
 		// UI setup
-		arg0.setTitle("Lights");
-		StackPane stackPane = new StackPane();
-		Button btn = new Button("test");
-		stackPane.getChildren().add(btn);
-		Scene livingRoom = new Scene(stackPane, 1200, 600);
-		arg0.setScene(livingRoom);
-		arg0.show();
+		stage.setTitle("Simulation");
+		final ToggleGroup group = new ToggleGroup();
+		HBox selection = new HBox();
+		selection.setPadding(new Insets(10));
+		selection.setSpacing(5);
+		for (int i = 0; i < rooms.size(); i++) {
+			ToggleButton button = rooms.get(i).getButton();
+			group.getToggles().addAll(button);
+			selection.getChildren().addAll(button);
+		}
+		VBox lights = new VBox();
+		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, final Toggle toggle, final Toggle new_toggle) {
+				// Clears the current light buttons
+				clear(lights);
+				if (new_toggle != null) {
+					for (int i = 0; i < rooms.size(); i++) {
+						// Checks for what room was pressed
+						if (rooms.get(i).getName() == ((ToggleButton) new_toggle).getText()) {
+							for (int j = 0; j < rooms.get(i).getLights().size(); j++) {
+								// Adds in the light buttons for that room
+								Label nameLabel = new Label(rooms.get(i).getLights().get(j).getName());
+								nameLabel.setStyle("-fx-padding: 3;" + "-fx-border-style: solid inside;");
+								Circle lightIndicator = new Circle(10, 10, 10);
+								if (rooms.get(i).getLights().get(j).getState()) {
+									lightIndicator.setFill(javafx.scene.paint.Color.GREEN);
+								} else {
+									lightIndicator.setFill(javafx.scene.paint.Color.RED);
+								}
+								lightIndicator.setStyle("-fx-padding: 3;");
+								HBox row = new HBox();
+								lights.setStyle("-fx-padding: 3;");
+								row.getChildren().addAll(nameLabel, lightIndicator);
+								lights.getChildren().addAll(row);
+							}
+						}
+					}
+				}
+			}
+		});
+		lights.setPadding(new Insets(10));
+		lights.setSpacing(5);
+		VBox root = new VBox();
+		root.getChildren().addAll(selection, lights);
+		root.setSpacing(10);
+		Scene scene = new Scene(root, 1200, 600);
+		stage.setScene(scene);
+		stage.show();
+
+		
+
 	}
 
-	public ArrayList<Room> getRooms() {
-		ArrayList<Room> rooms = new ArrayList<Room>();
-		ArrayList<LightSwitch> livingroomLights = new ArrayList<LightSwitch>();
-		livingroomLights.add(new LightSwitch("Ceiling Light (TV)", false));
-		livingroomLights.add(new LightSwitch("Ceiling Light (Dining)", false));
-		livingroomLights.add(new LightSwitch("Window Light 1", true));
-		livingroomLights.add(new LightSwitch("Window Light 2", true));
-		livingroomLights.add(new LightSwitch("Window Light 3", true));
-		livingroomLights.add(new LightSwitch("Window Light 4", false));
-		livingroomLights.add(new LightSwitch("Floor Light 1", true));
-		livingroomLights.add(new LightSwitch("Floor Light 2", true));
-		rooms.add(new Room("Livingroom", livingroomLights));
-		ArrayList<LightSwitch> bedroomLights = new ArrayList<LightSwitch>();
-		bedroomLights.add(new LightSwitch("Ceiling Light 1", true));
-		bedroomLights.add(new LightSwitch("Ceiling Light 2", true));
-		bedroomLights.add(new LightSwitch("Window Light", false));
-		bedroomLights.add(new LightSwitch("Night Light", true));
-		rooms.add(new Room("Bedroom", bedroomLights));
-		ArrayList<LightSwitch> kitchenLights = new ArrayList<LightSwitch>();
-		kitchenLights.add(new LightSwitch("Ceiling Light", true));
-		kitchenLights.add(new LightSwitch("Stove Light", false));
-		kitchenLights.add(new LightSwitch("Workbench Light", true));
-		kitchenLights.add(new LightSwitch("Cupboard Light", true));
-		kitchenLights.add(new LightSwitch("Window Light 1", true));
-		kitchenLights.add(new LightSwitch("Window Light 2", true));
-		rooms.add(new Room("Kitchen", kitchenLights));
-		ArrayList<LightSwitch> hallwayLights = new ArrayList<LightSwitch>();
-		hallwayLights.add(new LightSwitch("Ceiling Light 1", false));
-		hallwayLights.add(new LightSwitch("Ceiling Light 2", false));
-		hallwayLights.add(new LightSwitch("Wall Light", true));
-		rooms.add(new Room("Hallway", hallwayLights));
-		return rooms;
+	public void export(ArrayList<Room> rooms) {
+		this.rooms = rooms;
+	}
+
+	private void clear(VBox lights) {
+		lights.getChildren().clear();
 	}
 
 }
+
